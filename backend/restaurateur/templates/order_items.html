@@ -1,0 +1,68 @@
+{% extends 'base_restaurateur_page.html' %}
+
+{% block title %}Необработанные заказы | Star Burger{% endblock %}
+
+{% block content %}
+  <center>
+    <h2>Необработанные заказы</h2>
+  </center>
+
+  <hr/>
+  <br/>
+  <br/>
+  <div class="container">
+   <table class="table table-responsive">
+    <tr>
+      <th>ID заказа</th>
+      <th>Статус</th>
+      <th>Тип оплаты</th>
+      <th>Стоимость</th>
+      <th>Клиент</th>
+      <th>Телефон</th>
+      <th>Адрес доставки</th>
+      <th>Комментарии</th>
+      <th>Рестораны</th>
+      <th>Действия</th>
+    </tr>
+
+    {% for order, info in orders_with_restaurants %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.payment_method }}</td>
+        <td>{{ order.total_cost }}</td>
+        <td>{{ order.firstname }} {{ order.lastname }}</td>
+        <td>{{ order.phonenumber }}</td>
+        <td>{{ order.address }}</td>
+        <td>{{ order.comments }}</td>
+        <td>
+          {% if order.assigned_restaurant %}
+              Готовит {{ order.assigned_restaurant.name }}
+          {% elif info == "Координаты заказа отсутствуют" %}
+              {{ info }}
+          {% else %}
+              <details>
+                  <summary>
+                      Возможно приготовить в:
+                      <span class="details-marker bi bi-chevron-down"></span>
+                  </summary>
+                  <ul>
+                      {% for restaurant_info in info %}
+                          <li>{{ restaurant_info.restaurant.name }} - {{ restaurant_info.distance|floatformat:2 }} км</li>
+                      {% endfor %}
+                  </ul>
+              </details>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'admin:foodcartapp_order_change' order.id %}?next={{ request.path|urlencode }}">Редактировать</a>
+        </td>
+      </tr>
+      {% empty %}
+        <tr>
+          <td colspan="9">Нет необработанных заказов</td>
+        </tr>
+      {% endfor %}
+   </table>
+  </div>
+{% endblock %}
