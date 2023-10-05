@@ -28,6 +28,7 @@ services:
     build: ../frontend/
     container_name: frontend-nginx
     ports:
+      -  "443:443"
       - "80:80"
     volumes:
       - backend_static_data:/app/backend-static
