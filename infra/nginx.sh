@@ -4,7 +4,7 @@ apt update
 
 apt install -y nginx
 
-cp ./infra/nginx.conf /etc/nginx/sites-available/dvmn_7
+cp ./nginx.conf /etc/nginx/sites-available/dvmn_7
 
 ln -s /etc/nginx/sites-available/dvmn_7 /etc/nginx/sites-enabled/
 
