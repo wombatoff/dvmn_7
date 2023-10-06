@@ -59,6 +59,15 @@ sudo docker-compose up -d --build
 sudo docker-compose exec backend python manage.py migrate
 sudo docker-compose exec backend python manage.py createsuperuser
 ```
+В папке /infra сделать скрипт nginx.sh исполняемым:
+```
+chmod +x nginx.sh
+```
+Запустить скрипт настройки nginx:
+```
+sudo ./nginx.sh
+```
+
 
 ### Автор:
 [Wombatoff](https://github.com/wombatoff/)
