@@ -4,16 +4,31 @@ apt update
 
 apt install -y nginx
 
-cp ./nginx.conf /etc/nginx/sites-available/dvmn_7
+if [ -f "./nginx.conf" ]; then
+    cp ./nginx.conf /etc/nginx/sites-available/dvmn_7
 
-ln -s /etc/nginx/sites-available/dvmn_7 /etc/nginx/sites-enabled/
+    if [ $? -eq 0 ]; then
+        [ ! -d "/etc/nginx/sites-enabled/" ] && mkdir /etc/nginx/sites-enabled/
 
-rm /etc/nginx/sites-enabled/default
+        [ -L "/etc/nginx/sites-enabled/dvmn_7" ] && rm /etc/nginx/sites-enabled/dvmn_7
 
-systemctl restart nginx
+        ln -s /etc/nginx/sites-available/dvmn_7 /etc/nginx/sites-enabled/
 
-systemctl enable nginx
+        [ -f "/etc/nginx/sites-enabled/default" ] && rm /etc/nginx/sites-enabled/default
 
-echo "NGINX is installed with the custom configuration."
+        nginx -t
 
-systemctl status nginx
+        if [ $? -eq 0 ]; then
+            systemctl restart nginx
+            systemctl enable nginx
+            echo "NGINX is installed with the custom configuration."
+            systemctl status nginx
+        else
+            echo "There is an error in the NGINX configuration."
+        fi
+    else
+        echo "Failed to copy the configuration file."
+    fi
+else
+    echo "Configuration file not found in the current directory."
+fi
