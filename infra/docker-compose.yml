@@ -2,6 +2,8 @@ version: '3.3'
 
 services:
   db:
+    networks:
+      - dvmn_7_network
     image: postgres:15.0-alpine
     container_name: db
     restart: always
